@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report Open Burning in Nairobi — Complaint Helper</title>
+<style>
+:root{--ink:#1f2a37;--mut:#5b6b7c;--line:#e3e8ee;--navy:#16324f;--accent:#1a73e8}
+*{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:#fafbfc;line-height:1.55}
+.wrap{max-width:760px;margin:0 auto;padding:24px 16px 60px}
+h1{font-size:22px;color:var(--navy);margin:0 0 6px} .sub{color:var(--mut);font-size:14px;margin-bottom:18px}
+label{display:block;font-weight:600;font-size:14px;margin:14px 0 4px}
+input,textarea,select{width:100%;padding:10px 12px;font-size:15px;border:1px solid var(--line);border-radius:8px;font-family:inherit}
+textarea{min-height:70px}
+.hint{font-size:12.5px;color:var(--mut);margin-top:3px}
+.check{display:flex;gap:8px;align-items:flex-start;margin:14px 0;font-size:14px} .check input{width:auto;margin-top:3px}
+button{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:12px 18px;font-size:15px;font-weight:600;cursor:pointer;margin-top:16px}
+.out{white-space:pre-wrap;background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px;font-size:13.5px;margin-top:16px;display:none}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.law{background:#fff;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--mut);margin:16px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Report open burning in Nairobi</h1>
+<p class="sub">Open burning of waste is illegal (EMCA 1999 and the Air Quality Regulations, fines up to KSh 1M and beyond). Most complaints fail because they lack the details officials can act on. Fill this in; it writes a proper complaint addressed to the right offices. Nothing you type leaves your device until you press send in your own email app.</p>
+
+<label>Where exactly is the burning?</label>
+<input id="loc" placeholder="e.g. Empty plot next to Abhi's Restaurant, Lower Kabete Lane, Spring Valley">
+<p class="hint">Landmark + road + area. Add GPS coordinates if you can (long-press the spot in Google Maps).</p>
+
+<label>When did you see it? (date and time; note if it recurs)</label>
+<input id="when" placeholder="e.g. 6 July 2026, around 9pm; happens most evenings this month">
+
+<label>What is burning, and how big?</label>
+<input id="what" placeholder="e.g. Household waste and plastics, pile about 2m wide, heavy smoke drifting into homes">
+
+<label>Who is affected?</label>
+<input id="impact" placeholder="e.g. Smoke enters neighboring homes with children; school 200m downwind">
+
+<label>Do you have photos or video?</label>
+<select id="photos"><option>Yes, attached to this email</option><option>Yes, available on request</option><option>No</option></select>
+<p class="hint">Photos with the phone's date/location are strong evidence. Attach them after your email app opens.</p>
+
+<label>Your name (optional; complaints can be anonymous, though named ones are harder to ignore)</label>
+<input id="name" placeholder="Optional">
+
+<div class="check"><input type="checkbox" id="tally"><span>Also send a copy to the Atmos Nairobi public tally (atmosnairobi@gmail.com). We count complaints and, later, publish how many got a response. Your complaint, our receipt-keeping.</span></div>
+
+<div class="btnrow">
+<button onclick="gen(true)">Open in my email app</button>
+<button onclick="gen(false)" style="background:#5b6b7c">Just show the text (copy/paste)</button>
+</div>
+
+<div class="out" id="out"></div>
+
+<div class="law"><b>Where this goes:</b> NEMA incidents (incidence@nema.go.ke, hotline 0786 101 100 / 0741 101 100) and Nairobi City County environment department. <b>The law you are citing:</b> Environmental Management and Co-ordination Act s.87 (prohibits waste burning without a licence) and the Air Quality Regulations open-burning prohibition. You do not need a lawyer to complain; you need the location, the time, and persistence. If nothing happens, complain again and keep your reference numbers.</div>
+</div>
+<script>
+function gen(mail){
+const v=id=>document.getElementById(id).value.trim();
+const name=v('name')||'A concerned Nairobi resident';
+const tally=document.getElementById('tally').checked;
+const body=`To: The Director General, National Environment Management Authority\nCopy: County Executive Committee Member for Environment, Nairobi City County\n\nRE: COMPLAINT OF ILLEGAL OPEN BURNING OF WASTE\n\nI wish to formally report illegal open burning of waste, contrary to section 87 of the Environmental Management and Co-ordination Act and the open burning prohibition under the Air Quality Regulations.\n\nLOCATION: ${v('loc')||'[location]'}\nDATE AND TIME OBSERVED: ${v('when')||'[date/time]'}\nWHAT IS BURNING: ${v('what')||'[description]'}\nWHO IS AFFECTED: ${v('impact')||'[impact]'}\nPHOTO/VIDEO EVIDENCE: ${document.getElementById('photos').value}\n\nI request that NEMA (1) inspects this site, (2) takes enforcement action as provided by law, and (3) provides me a complaint reference number and informs me of the outcome.\n\n${name}`;
+const subj='Complaint: illegal open burning at '+(v('loc').split(',')[0]||'[location]');
+const cc='cc='+encodeURIComponent(tally?'atmosnairobi@gmail.com':'');
+if(mail){location.href='mailto:incidence@nema.go.ke?'+(tally?cc+'&':'')+'subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);}
+const o=document.getElementById('out');o.style.display='block';o.textContent='To: incidence@nema.go.ke'+(tally?'\nCc: atmosnairobi@gmail.com':'')+'\nSubject: '+subj+'\n\n'+body+'\n\n(Attach photos before sending. Save any reply and reference number.)';
+}
+</script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 # Atmos Nairobi daily AQI digest — posts to Bluesky every morning 07:00 EAT.
-# Set up 6 Jul 2026 per Kari's decision (sustainable autopilot, no laptop needed).
+# Set up 6 Jul 2026 sustainable autopilot, no laptop needed.
 # Secrets required (repo Settings > Secrets and variables > Actions):
 #   AIRQO_TOKEN, BSKY_HANDLE, BSKY_APP_PASSWORD
 name: daily-digest

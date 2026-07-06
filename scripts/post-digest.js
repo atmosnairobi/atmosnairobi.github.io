@@ -9,7 +9,7 @@
 // - Skips if the post somehow exceeds 300 characters.
 // - Anomalies (>150 ug/m3) are logged, never posted.
 // - Won't post twice in one day (checks logs/digest-log.txt).
-// - Won't post before 2026-07-13 (launch date set by Kari).
+// - Won't post before 2026-07-13 (the public launch date).
 //
 // Secrets come from the environment (GitHub repo secrets), never this file:
 //   AIRQO_TOKEN, BSKY_HANDLE (atmosnairobi.bsky.social), BSKY_APP_PASSWORD

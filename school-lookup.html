@@ -1,101 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
-</head>
-<body>
-<x-dc>
-<helmet>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Is your school's air being measured? — Nairobi sensor lookup</title>
 <style>
-body{margin:0;background:#fafbfc;}
-input::placeholder{color:#9aa7b4}
+  :root{--ink:#1f2a37;--mut:#5b6b7c;--line:#e3e8ee;--good:#2e9e5b;--mod:#d9a800;--usg:#e07b00;--bad:#c93c3c;--navy:#16324f}
+  *{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:#fafbfc;line-height:1.5}
+  .wrap{max-width:860px;margin:0 auto;padding:24px 16px 60px}
+  h1{font-size:22px;margin:0 0 6px;color:var(--navy)}
+  .sub{color:var(--mut);font-size:14px;margin-bottom:18px}
+  input{width:100%;padding:12px 14px;font-size:16px;border:1px solid var(--line);border-radius:10px;margin-bottom:14px}
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  th{background:var(--navy);color:#fff;text-align:left;padding:9px 12px;font-size:13px}
+  td{padding:9px 12px;border-top:1px solid var(--line);font-size:14px}
+  .pill{display:inline-block;padding:1px 9px;border-radius:12px;font-size:12px;color:#fff}
+  .Good{background:var(--good)} .Moderate{background:var(--mod)} .USG{background:var(--usg)} .Unhealthy{background:var(--bad)} .offline{background:#9aa7b4}
+  .note{color:var(--mut);font-size:12.5px;margin-top:18px}
+  .stamp{font-size:12.5px;color:var(--mut);margin-bottom:14px}
 </style>
-</helmet>
-<div style="min-height:100vh;background:#fafbfc;color:#1f2a37;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;line-height:1.5" data-screen-label="School Lookup">
-
-  <div style="position:relative;width:100%;background-image:url('uploads/sky.jpg');background-size:cover;background-position:center 25%;padding:48px 16px 120px">
-    <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(22,50,79,0.45) 0%, rgba(22,50,79,0.38) 40%, rgba(22,50,79,0.18) 62%, rgba(250,251,252,0.45) 82%, rgba(250,251,252,1) 100%)"></div>
-    <div style="position:relative;max-width:860px;margin:0 auto">
-      <a href="index.html" style="font-size:13px;color:#fff;text-decoration:none;opacity:.9;display:inline-flex;align-items:center;gap:6px"><span>←</span><span>Atmos Nairobi</span></a>
-      <h1 style="font-size:26px;margin:14px 0 6px;color:#fff;text-shadow:0 1px 8px rgba(22,50,79,0.35)">Is your school's air being measured?</h1>
-      <p style="color:#eef4f8;font-size:14.5px;margin:0;max-width:640px;text-shadow:0 1px 6px rgba(22,50,79,0.35);text-wrap:pretty">Nairobi County runs air quality sensors at schools and health facilities. Type a school or area name to see if there's a monitor near you, and what it last read. PM2.5 is fine dust; the WHO daily guideline is 15 µg/m³.</p>
-    </div>
-  </div>
-
-  <div style="max-width:860px;margin:0 auto;padding:20px 16px 60px">
-    <div style="font-size:12.5px;color:#5b6b7c;margin-bottom:14px">{{ stamp }}</div>
-    <input type="search" placeholder="Search school or area (e.g. Kasarani, Woodley, Mukuru)..." value="{{ query }}" onChange="{{ onQuery }}" style="width:100%;padding:12px 14px;font-size:16px;border:1px solid #e3e8ee;border-radius:10px;margin-bottom:14px;box-shadow:0 2px 8px rgba(22,50,79,0.05)">
-    <div style="background:#fff;border:1px solid #e3e8ee;border-radius:10px;overflow:hidden">
-      <div style="display:grid;grid-template-columns:1fr 190px 90px 60px;background:#16324f;color:#fff;font-size:13px;font-weight:600">
-        <div style="padding:9px 12px">Station</div><div style="padding:9px 12px">PM2.5</div><div style="padding:9px 12px">Status</div><div style="padding:9px 12px">Map</div>
-      </div>
-      <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
-        <div style="display:grid;grid-template-columns:1fr 190px 90px 60px;border-top:1px solid #e3e8ee;font-size:14px;align-items:center">
-          <div style="padding:9px 12px">{{ r.name }}</div>
-          <div style="padding:9px 12px;display:flex;align-items:center;gap:8px"><span>{{ r.pmText }}</span><span style="display:inline-block;padding:1px 9px;border-radius:12px;font-size:12px;color:#fff;background:{{ r.pillColor }}">{{ r.label }}</span></div>
-          <div style="padding:9px 12px;color:#5b6b7c">{{ r.status }}</div>
-          <div style="padding:9px 12px"><a href="{{ r.mapUrl }}" target="_blank" rel="noopener" style="color:#3f8683">map</a></div>
-        </div>
-      </sc-for>
-    </div>
-    <p style="color:#5b6b7c;font-size:12.5px;margin-top:18px;text-wrap:pretty">Data: Nairobi City County air quality network (airquality.nairobi.go.ke). This page is an independent community tool, not a county service. Sensor list pulled 5 Jul 2026; readings refresh live when the county API allows. A station being offline is worth asking your county rep about — the sensors exist to be working.</p>
-  </div>
+</head>
+<body>
+<div class="wrap">
+  <h1>Is your school's air being measured?</h1>
+  <p class="sub">Nairobi County runs air quality sensors at schools and health facilities. Type a school or area name to see if there's a monitor near you, and what it last read. PM2.5 is fine dust; the WHO daily guideline is 15 &micro;g/m&sup3;.</p>
+  <div class="stamp" id="stamp">Snapshot: 5 July 2026 (live refresh attempted on load)</div>
+  <input id="q" type="search" placeholder="Search school or area (e.g. Kasarani, Woodley, Mukuru)..." autofocus>
+  <table><thead><tr><th>Station</th><th>PM2.5</th><th>Status</th><th>Map</th></tr></thead><tbody id="rows"></tbody></table>
+  <p class="note">Data: Nairobi City County air quality network (airquality.nairobi.go.ke). This page is an independent community tool, not a county service. Sensor list pulled 5 Jul 2026; readings refresh live when the county API allows. A station being offline is worth asking your county rep about — the sensors exist to be working.</p>
 </div>
-</x-dc>
-<script type="text/x-dc" data-dc-script>
-class Component extends DCLogic {
-  state = { query: '', stamp: 'Snapshot: 5 July 2026 (live refresh attempted on load)', data: null };
-
-  SNAPSHOT = [["Mukuru Health Centre",37.1,"online",-1.3319,36.7865],["Martin Luther Primary School",52.4,"online",-1.2982,36.8768],["Westlands Primary School",18.6,"offline",-1.2563,36.7926],["Mama Lucy Kibaki Hospital 2",9.1,"online",-1.2698,36.9001],["Lavington Primary School",31.6,"offline",-1.2789,36.77],["Riruta Satellite Primary School",70.1,"offline",-1.2881,36.7363],["Kware Police Station",13.6,"online",-1.2179,36.9079],["Juja Rd. Primary School",32.5,"online",-1.2772,36.8396],["Uhuru Estate Primary School",57.4,"online",-1.2852,36.8675],["Thawabu Comprehensive School",55.5,"online",-1.2795,36.9206],["Bahati Level 4 Hospital",20.5,"online",-1.2882,36.8675],["Cheleta Primary School",6.5,"online",-1.218,36.8213],["Kasarani Primary School",47.8,"online",-1.2286,36.9284],["Dr Mwenje Secondary School",23.4,"online",-1.2737,36.8859],["Mbagathi Way Primary School",13.1,"offline",-1.3085,36.7971],["Ushirika Primary School",50.0,"online",-1.244,36.9086],["St. Mary's Primary School",53.0,"online",-1.3239,36.716],["Nairobi West Day Nursery School",15.4,"online",-1.3043,36.8212],["Marurui Primary School",13.1,"online",-1.2068,36.8665],["Visa Oshwal Primary School",32.6,"online",-1.2569,36.8102],["Kayole 1 Comprehensive School",67.4,"online",-1.263,36.9241],["Karura Forest Primary School",15.4,"online",-1.2481,36.8452],["St. George's Primary School",34.6,"online",-1.279,36.7953],["Nairobi River Comprehensive School",78.3,"online",-1.2742,36.8795],["New Kihumbuini Primary School",13.0,"online",-1.2615,36.7482],["Highway Manyatta Comprehensive",35.7,"online",-1.2842,37.0241],["Supaloaf Primary School",47.9,"online",-1.271,36.8973],["Njiru Level 4 Hospital",11.1,"online",-1.2458,36.9366],["Githurai Secondary School",9.1,"online",-1.1976,36.914],["Mihango Primary School",9.5,"online",-1.2745,36.9538],["Drumvale Primary School",7.7,"online",-1.293,37.0416],["Kiwanja Primary School",10.5,"online",-1.1654,36.9244],["Huruma Primary School",16.6,"online",-1.2551,36.8763],["Uhuru Garden Primary School",7.7,"online",-1.323,36.8839],["Woodley Secondary School",79.9,"online",-1.3116,36.7792],["Lang'ata Rd Primary School",10.5,"online",-1.313,36.8144],["Tumaini Primary School",81.0,"online",-1.2806,36.9003],["Mutuini Primary School",33.3,"offline",-1.2985,36.6904],["Kabete Vetlab Primary School",28.0,"online",-1.268,36.7215],["Maua Primary School",9.5,"online",-1.255,36.9523],["Valley Bridge Primary School",59.9,"online",-1.2516,36.8733],["Mukuru Community Center",9.0,"online",-1.3131,36.8867],["Lower Kabete Primary School",15.4,"online",-1.238,36.7428]];
-
-  componentDidMount() {
-    fetch('https://airquality.nairobi.go.ke/api/v1/stations').then(r => r.json()).then(j => {
-      const fresh = (j.data || []).filter(s => s.name && s.pm25 != null && !/^a(irqo|q)_/.test(s.name));
-      if (fresh.length > 10) {
-        this.setState({
-          data: fresh.map(s => ({ name: s.name, pm: s.pm25, status: s.isOnline ? 'online' : 'offline', lat: s.lat, lng: s.lng })),
-          stamp: 'Live: ' + new Date().toLocaleString()
-        });
-      }
-    }).catch(() => {});
-  }
-
-  band(pm, status) {
-    if (status !== 'online') return { label: 'offline', color: '#9aa7b4' };
-    if (pm <= 15) return { label: 'Good', color: '#2e9e5b' };
-    if (pm <= 35) return { label: 'Moderate', color: '#d9a800' };
-    if (pm <= 55) return { label: 'Sensitive', color: '#e07b00' };
-    return { label: 'Unhealthy', color: '#c93c3c' };
-  }
-
-  renderVals() {
-    const q = this.state.query.toLowerCase();
-    const data = this.state.data || this.SNAPSHOT.map(s => ({ name: s[0], pm: s[1], status: s[2], lat: s[3], lng: s[4] }));
-    const rows = data
-      .filter(d => !q || d.name.toLowerCase().includes(q))
-      .sort((a, b) => b.pm - a.pm)
-      .map(d => {
-        const b = this.band(d.pm, d.status);
-        return {
-          name: d.name,
-          pmText: d.pm.toFixed(0) + ' µg/m³',
-          label: b.label,
-          pillColor: b.color,
-          status: d.status,
-          mapUrl: `https://www.openstreetmap.org/?mlat=${d.lat}&mlon=${d.lng}#map=16/${d.lat}/${d.lng}`
-        };
-      });
-    return {
-      rows,
-      query: this.state.query,
-      stamp: this.state.stamp,
-      onQuery: (e) => this.setState({ query: e.target.value })
-    };
-  }
-}
+<script>
+const SNAPSHOT=[["Mukuru Health Centre",37.1,"online",-1.3319,36.7865],["Martin Luther Primary School",52.4,"online",-1.2982,36.8768],["Westlands Primary School",18.6,"offline",-1.2563,36.7926],["Mama Lucy Kibaki Hospital 2",9.1,"online",-1.2698,36.9001],["Lavington Primary School",31.6,"offline",-1.2789,36.77],["Riruta Satellite Primary School",70.1,"offline",-1.2881,36.7363],["Kware Police Station",13.6,"online",-1.2179,36.9079],["Juja Rd. Primary School",32.5,"online",-1.2772,36.8396],["Uhuru Estate Primary School",57.4,"online",-1.2852,36.8675],["Thawabu Comprehensive School",55.5,"online",-1.2795,36.9206],["Bahati Level 4 Hospital",20.5,"online",-1.2882,36.8675],["Cheleta Primary School",6.5,"online",-1.218,36.8213],["Kasarani Primary School",47.8,"online",-1.2286,36.9284],["Dr Mwenje Secondary School",23.4,"online",-1.2737,36.8859],["Mbagathi Way Primary School",13.1,"offline",-1.3085,36.7971],["Ushirika Primary School",50.0,"online",-1.244,36.9086],["St. Mary's Primary School",53.0,"online",-1.3239,36.716],["Nairobi West Day Nursery School",15.4,"online",-1.3043,36.8212],["Marurui Primary School",13.1,"online",-1.2068,36.8665],["Visa Oshwal Primary School",32.6,"online",-1.2569,36.8102],["Kayole 1 Comprehensive School",67.4,"online",-1.263,36.9241],["Karura Forest Primary School",15.4,"online",-1.2481,36.8452],["St. George's Primary School",34.6,"online",-1.279,36.7953],["Nairobi River Comprehensive School",78.3,"online",-1.2742,36.8795],["New Kihumbuini Primary School",13.0,"online",-1.2615,36.7482],["Highway Manyatta Comprehensive",35.7,"online",-1.2842,37.0241],["Supaloaf Primary School",47.9,"online",-1.271,36.8973],["Njiru Level 4 Hospital",11.1,"online",-1.2458,36.9366],["Githurai Secondary School",9.1,"online",-1.1976,36.914],["Mihango Primary School",9.5,"online",-1.2745,36.9538],["Drumvale Primary School",7.7,"online",-1.293,37.0416],["Kiwanja Primary School",10.5,"online",-1.1654,36.9244],["Huruma Primary School",16.6,"online",-1.2551,36.8763],["Uhuru Garden Primary School",7.7,"online",-1.323,36.8839],["Woodley Secondary School",79.9,"online",-1.3116,36.7792],["Lang'ata Rd Primary School",10.5,"online",-1.313,36.8144],["Tumaini Primary School",81.0,"online",-1.2806,36.9003],["Mutuini Primary School",33.3,"offline",-1.2985,36.6904],["Kabete Vetlab Primary School",28.0,"online",-1.268,36.7215],["Maua Primary School",9.5,"online",-1.255,36.9523],["Valley Bridge Primary School",59.9,"online",-1.2516,36.8733],["Mukuru Community Center",9.0,"online",-1.3131,36.8867],["Lower Kabete Primary School",15.4,"online",-1.238,36.7428]];
+let data = SNAPSHOT.map(s=>({name:s[0],pm:s[1],status:s[2],lat:s[3],lng:s[4]}));
+function band(pm,status){ if(status!=='online') return ['offline','offline']; if(pm<=15)return['Good','Good']; if(pm<=35)return['Moderate','Moderate']; if(pm<=55)return['USG','Sensitive']; return ['Unhealthy','Unhealthy']; }
+function render(q){ const tb=document.getElementById('rows'); tb.innerHTML='';
+  data.filter(d=>!q||d.name.toLowerCase().includes(q.toLowerCase())).sort((a,b)=>b.pm-a.pm).forEach(d=>{
+    const [cls,label]=band(d.pm,d.status);
+    tb.insertAdjacentHTML('beforeend',`<tr><td>${d.name}</td><td>${d.pm.toFixed(0)} &micro;g/m&sup3; <span class="pill ${cls}">${label}</span></td><td>${d.status}</td><td><a href="https://www.openstreetmap.org/?mlat=${d.lat}&mlon=${d.lng}#map=16/${d.lat}/${d.lng}" target="_blank" rel="noopener">map</a></td></tr>`);
+  });}
+document.getElementById('q').addEventListener('input',e=>render(e.target.value));
+render('');
+// Live refresh attempt (works if the county API sends CORS headers; falls back silently to snapshot)
+fetch('https://airquality.nairobi.go.ke/api/v1/stations').then(r=>r.json()).then(j=>{
+  const fresh=(j.data||[]).filter(s=>s.name&&s.pm25!=null&&!/^a(irqo|q)_/.test(s.name));
+  if(fresh.length>10){ data=fresh.map(s=>({name:s.name,pm:s.pm25,status:s.isOnline?'online':'offline',lat:s.lat,lng:s.lng}));
+    document.getElementById('stamp').textContent='Live: '+new Date().toLocaleString(); render(document.getElementById('q').value); }
+}).catch(()=>{});
 </script>
 </body>
 </html>

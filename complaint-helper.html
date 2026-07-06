@@ -1,102 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
-</head>
-<body>
-<x-dc>
-<helmet>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Report Open Burning in Nairobi — Complaint Helper</title>
 <style>
-body{margin:0;background:#fafbfc;}
-input::placeholder,textarea::placeholder{color:#9aa7b4}
+:root{--ink:#1f2a37;--mut:#5b6b7c;--line:#e3e8ee;--navy:#16324f;--accent:#1a73e8}
+*{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:#fafbfc;line-height:1.55}
+.wrap{max-width:760px;margin:0 auto;padding:24px 16px 60px}
+h1{font-size:22px;color:var(--navy);margin:0 0 6px} .sub{color:var(--mut);font-size:14px;margin-bottom:18px}
+label{display:block;font-weight:600;font-size:14px;margin:14px 0 4px}
+input,textarea,select{width:100%;padding:10px 12px;font-size:15px;border:1px solid var(--line);border-radius:8px;font-family:inherit}
+textarea{min-height:70px}
+.hint{font-size:12.5px;color:var(--mut);margin-top:3px}
+.check{display:flex;gap:8px;align-items:flex-start;margin:14px 0;font-size:14px} .check input{width:auto;margin-top:3px}
+button{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:12px 18px;font-size:15px;font-weight:600;cursor:pointer;margin-top:16px}
+.out{white-space:pre-wrap;background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px;font-size:13.5px;margin-top:16px;display:none}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.law{background:#fff;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--mut);margin:16px 0}
 </style>
-</helmet>
-<div style="min-height:100vh;background:#fafbfc;color:#1f2a37;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;line-height:1.55" data-screen-label="Complaint Helper">
+</head>
+<body>
+<div class="wrap">
+<h1>Report open burning in Nairobi</h1>
+<p class="sub">Open burning of waste is illegal (EMCA 1999 and the Air Quality Regulations, fines up to KSh 1M and beyond). Most complaints fail because they lack the details officials can act on. Fill this in; it writes a proper complaint addressed to the right offices. Nothing you type leaves your device until you press send in your own email app.</p>
 
-  <div style="position:relative;width:100%;background-image:url('uploads/sky.jpg');background-size:cover;background-position:center 20%;padding:48px 16px 120px">
-    <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(22,50,79,0.45) 0%, rgba(22,50,79,0.38) 40%, rgba(22,50,79,0.18) 62%, rgba(250,251,252,0.45) 82%, rgba(250,251,252,1) 100%)"></div>
-    <div style="position:relative;max-width:760px;margin:0 auto">
-      <a href="index.html" style="font-size:13px;color:#fff;text-decoration:none;opacity:.9;display:inline-flex;align-items:center;gap:6px"><span>←</span><span>Atmos Nairobi</span></a>
-      <h1 style="font-size:26px;margin:14px 0 6px;color:#fff;text-shadow:0 1px 8px rgba(22,50,79,0.35)">Report open burning in Nairobi</h1>
-      <p style="color:#eef4f8;font-size:14.5px;margin:0;max-width:640px;text-shadow:0 1px 6px rgba(22,50,79,0.35);text-wrap:pretty">Open burning of waste is illegal (EMCA 1999 and the Air Quality Regulations, fines up to KSh 1M and beyond). Most complaints fail because they lack the details officials can act on. Fill this in; it writes a proper complaint addressed to the right offices. Nothing you type leaves your device until you press send in your own email app.</p>
-    </div>
-  </div>
+<label>Where exactly is the burning?</label>
+<input id="loc" placeholder="e.g. Empty plot next to Abhi's Restaurant, Lower Kabete Lane, Spring Valley">
+<p class="hint">Landmark + road + area. Add GPS coordinates if you can (long-press the spot in Google Maps).</p>
 
-  <div style="max-width:760px;margin:0 auto;padding:16px 16px 60px">
+<label>When did you see it? (date and time; note if it recurs)</label>
+<input id="when" placeholder="e.g. 6 July 2026, around 9pm; happens most evenings this month">
 
-    <label style="display:block;font-weight:600;font-size:14px;margin:14px 0 4px">Where exactly is the burning?</label>
-    <input value="{{ loc }}" onChange="{{ onLoc }}" placeholder="e.g. Empty plot next to Abhi's Restaurant, Lower Kabete Lane, Spring Valley" style="width:100%;box-sizing:border-box;padding:10px 12px;font-size:15px;border:1px solid #e3e8ee;border-radius:8px;font-family:inherit">
-    <p style="font-size:12.5px;color:#5b6b7c;margin:3px 0 0">Landmark + road + area. Add GPS coordinates if you can (long-press the spot in Google Maps).</p>
+<label>What is burning, and how big?</label>
+<input id="what" placeholder="e.g. Household waste and plastics, pile about 2m wide, heavy smoke drifting into homes">
 
-    <label style="display:block;font-weight:600;font-size:14px;margin:14px 0 4px">When did you see it? (date and time; note if it recurs)</label>
-    <input value="{{ when }}" onChange="{{ onWhen }}" placeholder="e.g. 6 July 2026, around 9pm; happens most evenings this month" style="width:100%;box-sizing:border-box;padding:10px 12px;font-size:15px;border:1px solid #e3e8ee;border-radius:8px;font-family:inherit">
+<label>Who is affected?</label>
+<input id="impact" placeholder="e.g. Smoke enters neighboring homes with children; school 200m downwind">
 
-    <label style="display:block;font-weight:600;font-size:14px;margin:14px 0 4px">What is burning, and how big?</label>
-    <input value="{{ what }}" onChange="{{ onWhat }}" placeholder="e.g. Household waste and plastics, pile about 2m wide, heavy smoke drifting into homes" style="width:100%;box-sizing:border-box;padding:10px 12px;font-size:15px;border:1px solid #e3e8ee;border-radius:8px;font-family:inherit">
+<label>Do you have photos or video?</label>
+<select id="photos"><option>Yes, attached to this email</option><option>Yes, available on request</option><option>No</option></select>
+<p class="hint">Photos with the phone's date/location are strong evidence. Attach them after your email app opens.</p>
 
-    <label style="display:block;font-weight:600;font-size:14px;margin:14px 0 4px">Who is affected?</label>
-    <input value="{{ impact }}" onChange="{{ onImpact }}" placeholder="e.g. Smoke enters neighboring homes with children; school 200m downwind" style="width:100%;box-sizing:border-box;padding:10px 12px;font-size:15px;border:1px solid #e3e8ee;border-radius:8px;font-family:inherit">
+<label>Your name (optional; complaints can be anonymous, though named ones are harder to ignore)</label>
+<input id="name" placeholder="Optional">
 
-    <label style="display:block;font-weight:600;font-size:14px;margin:14px 0 4px">Do you have photos or video?</label>
-    <select value="{{ photos }}" onChange="{{ onPhotos }}" style="width:100%;box-sizing:border-box;padding:10px 12px;font-size:15px;border:1px solid #e3e8ee;border-radius:8px;font-family:inherit;background:#fff">
-      <option>Yes, attached to this email</option>
-      <option>Yes, available on request</option>
-      <option>No</option>
-    </select>
-    <p style="font-size:12.5px;color:#5b6b7c;margin:3px 0 0">Photos with the phone's date/location are strong evidence. Attach them after your email app opens.</p>
+<div class="check"><input type="checkbox" id="tally"><span>Also send a copy to the Atmos Nairobi public tally (atmosnairobi@gmail.com). We count complaints and, later, publish how many got a response. Your complaint, our receipt-keeping.</span></div>
 
-    <label style="display:block;font-weight:600;font-size:14px;margin:14px 0 4px">Your name (optional; complaints can be anonymous, though named ones are harder to ignore)</label>
-    <input value="{{ name }}" onChange="{{ onName }}" placeholder="Optional" style="width:100%;box-sizing:border-box;padding:10px 12px;font-size:15px;border:1px solid #e3e8ee;border-radius:8px;font-family:inherit">
-
-    <label style="display:flex;gap:8px;align-items:flex-start;margin:14px 0;font-size:14px;cursor:pointer">
-      <input type="checkbox" checked="{{ tally }}" onChange="{{ onTally }}" style="width:auto;margin-top:3px">
-      <span>Also send a copy to the Atmos Nairobi public tally (atmosnairobi@gmail.com). We count complaints and, later, publish how many got a response. Your complaint, our receipt-keeping.</span>
-    </label>
-
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <button onClick="{{ genMail }}" style="background:#16324f;color:#fff;border:none;border-radius:8px;padding:12px 18px;font-size:15px;font-weight:600;cursor:pointer;margin-top:16px" style-hover="background:#1e4269">Open in my email app</button>
-      <button onClick="{{ genText }}" style="background:#5b6b7c;color:#fff;border:none;border-radius:8px;padding:12px 18px;font-size:15px;font-weight:600;cursor:pointer;margin-top:16px" style-hover="background:#6b7b8c">Just show the text (copy/paste)</button>
-    </div>
-
-    <sc-if value="{{ hasOutput }}" hint-placeholder-val="{{ false }}">
-      <div style="white-space:pre-wrap;background:#fff;border:1px solid #e3e8ee;border-radius:8px;padding:14px;font-size:13.5px;margin-top:16px">{{ output }}</div>
-    </sc-if>
-
-    <div style="background:#fff;border:1px solid #e3e8ee;border-left:3px solid #1a73e8;border-radius:8px;padding:10px 14px;font-size:13px;color:#5b6b7c;margin:16px 0"><b>Where this goes:</b> NEMA incidents (incidence@nema.go.ke, hotline 0786 101 100 / 0741 101 100) and Nairobi City County environment department. <b>The law you are citing:</b> Environmental Management and Co-ordination Act s.87 (prohibits waste burning without a licence) and the Air Quality Regulations open-burning prohibition. You do not need a lawyer to complain; you need the location, the time, and persistence. If nothing happens, complain again and keep your reference numbers.</div>
-  </div>
+<div class="btnrow">
+<button onclick="gen(true)">Open in my email app</button>
+<button onclick="gen(false)" style="background:#5b6b7c">Just show the text (copy/paste)</button>
 </div>
-</x-dc>
-<script type="text/x-dc" data-dc-script>
-class Component extends DCLogic {
-  state = { loc: '', when: '', what: '', impact: '', photos: 'Yes, attached to this email', name: '', tally: false, output: '' };
 
-  gen(mail) {
-    const s = this.state;
-    const name = s.name.trim() || 'A concerned Nairobi resident';
-    const body = `To: The Director General, National Environment Management Authority\nCopy: County Executive Committee Member for Environment, Nairobi City County\n\nRE: COMPLAINT OF ILLEGAL OPEN BURNING OF WASTE\n\nI wish to formally report illegal open burning of waste, contrary to section 87 of the Environmental Management and Co-ordination Act and the open burning prohibition under the Air Quality Regulations.\n\nLOCATION: ${s.loc.trim() || '[location]'}\nDATE AND TIME OBSERVED: ${s.when.trim() || '[date/time]'}\nWHAT IS BURNING: ${s.what.trim() || '[description]'}\nWHO IS AFFECTED: ${s.impact.trim() || '[impact]'}\nPHOTO/VIDEO EVIDENCE: ${s.photos}\n\nI request that NEMA (1) inspects this site, (2) takes enforcement action as provided by law, and (3) provides me a complaint reference number and informs me of the outcome.\n\n${name}`;
-    const subj = 'Complaint: illegal open burning at ' + (s.loc.trim().split(',')[0] || '[location]');
-    if (mail) {
-      const cc = s.tally ? 'cc=' + encodeURIComponent('atmosnairobi@gmail.com') + '&' : '';
-      window.location.href = 'mailto:incidence@nema.go.ke?' + cc + 'subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(body);
-    }
-    this.setState({ output: 'To: incidence@nema.go.ke' + (s.tally ? '\nCc: atmosnairobi@gmail.com' : '') + '\nSubject: ' + subj + '\n\n' + body + '\n\n(Attach photos before sending. Save any reply and reference number.)' });
-  }
+<div class="out" id="out"></div>
 
-  renderVals() {
-    const s = this.state;
-    const set = key => e => this.setState({ [key]: e.target.type === 'checkbox' ? e.target.checked : e.target.value });
-    return {
-      loc: s.loc, when: s.when, what: s.what, impact: s.impact, photos: s.photos, name: s.name, tally: s.tally,
-      onLoc: set('loc'), onWhen: set('when'), onWhat: set('what'), onImpact: set('impact'), onPhotos: set('photos'), onName: set('name'), onTally: set('tally'),
-      genMail: () => this.gen(true),
-      genText: () => this.gen(false),
-      hasOutput: !!s.output,
-      output: s.output
-    };
-  }
+<div class="law"><b>Where this goes:</b> NEMA incidents (incidence@nema.go.ke, hotline 0786 101 100 / 0741 101 100) and Nairobi City County environment department. <b>The law you are citing:</b> Environmental Management and Co-ordination Act s.87 (prohibits waste burning without a licence) and the Air Quality Regulations open-burning prohibition. You do not need a lawyer to complain; you need the location, the time, and persistence. If nothing happens, complain again and keep your reference numbers.</div>
+</div>
+<script>
+function gen(mail){
+const v=id=>document.getElementById(id).value.trim();
+const name=v('name')||'A concerned Nairobi resident';
+const tally=document.getElementById('tally').checked;
+const body=`To: The Director General, National Environment Management Authority\nCopy: County Executive Committee Member for Environment, Nairobi City County\n\nRE: COMPLAINT OF ILLEGAL OPEN BURNING OF WASTE\n\nI wish to formally report illegal open burning of waste, contrary to section 87 of the Environmental Management and Co-ordination Act and the open burning prohibition under the Air Quality Regulations.\n\nLOCATION: ${v('loc')||'[location]'}\nDATE AND TIME OBSERVED: ${v('when')||'[date/time]'}\nWHAT IS BURNING: ${v('what')||'[description]'}\nWHO IS AFFECTED: ${v('impact')||'[impact]'}\nPHOTO/VIDEO EVIDENCE: ${document.getElementById('photos').value}\n\nI request that NEMA (1) inspects this site, (2) takes enforcement action as provided by law, and (3) provides me a complaint reference number and informs me of the outcome.\n\n${name}`;
+const subj='Complaint: illegal open burning at '+(v('loc').split(',')[0]||'[location]');
+const cc='cc='+encodeURIComponent(tally?'atmosnairobi@gmail.com':'');
+if(mail){location.href='mailto:incidence@nema.go.ke?'+(tally?cc+'&':'')+'subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);}
+const o=document.getElementById('out');o.style.display='block';o.textContent='To: incidence@nema.go.ke'+(tally?'\nCc: atmosnairobi@gmail.com':'')+'\nSubject: '+subj+'\n\n'+body+'\n\n(Attach photos before sending. Save any reply and reference number.)';
 }
 </script>
 </body>

@@ -1,4 +1,4 @@
-// Atmos Nairobi daily AQI digest — GitHub Actions poster, v1.0 (6 Jul 2026).
+// Atmos Nairobi daily AQI digest - GitHub Actions poster, v1.1 (20 Jul 2026).
 // Runs on GitHub's servers (see .github/workflows/daily-digest.yml).
 // Pipeline: AirQo cohort recent -> Nairobi box -> freshness filter -> fixed
 // template -> post to Bluesky. Logic mirrors projects/aqi-digest-bot/bot.js.
@@ -10,6 +10,11 @@
 // - Anomalies (>150 ug/m3) are logged, never posted.
 // - Won't post twice in one day (checks logs/digest-log.txt).
 // - Won't post before 2026-07-13 (the public launch date).
+//
+// v1.1 reliability fix: the AirQo fetch now retries with a timeout and tolerates
+// a bad or non-JSON response instead of crashing the run. If AirQo stays
+// unreachable it logs a clear SKIPPED line (audit trail) and exits cleanly,
+// the same way scripts/snapshot.js already copes with this flaky endpoint.
 //
 // Secrets come from the environment (GitHub repo secrets), never this file:
 //   AIRQO_TOKEN, BSKY_HANDLE (atmosnairobi.bsky.social), BSKY_APP_PASSWORD
@@ -65,8 +70,36 @@ const tip = (mean) =>
   : mean > 15 ? 'Sensitive groups: take it easy outdoors.'
   : 'A good day for outdoor play.';
 
+// Resilient fetch: retries with a per-attempt timeout, and turns a non-ok or
+// non-JSON response into a clear error instead of crashing on .json(). This is
+// the whole point of v1.1 - a single AirQo hiccup no longer kills the post.
+async function fetchJson(url, fetchFn = fetch, tries = 4, timeoutMs = 40000) {
+  let lastErr;
+  for (let i = 1; i <= tries; i++) {
+    try {
+      const r = await fetchFn(url, { signal: AbortSignal.timeout(timeoutMs) });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const body = await r.text();
+      try {
+        return JSON.parse(body);
+      } catch (_) {
+        throw new Error('non-JSON response: ' + body.slice(0, 60).replace(/\s+/g, ' '));
+      }
+    } catch (e) {
+      lastErr = e;
+      if (i < tries) await new Promise((res) => setTimeout(res, 20000));
+    }
+  }
+  throw lastErr;
+}
+
 async function buildDigest(token, fetchFn = fetch) {
-  const j = await fetchFn(API(token)).then((r) => r.json());
+  let j;
+  try {
+    j = await fetchJson(API(token), fetchFn);
+  } catch (e) {
+    return { ok: false, reason: 'AirQo unreachable after retries: ' + e.message };
+  }
   const rows = (j.measurements || [])
     .filter((x) => x.deviceDetails && x.pm2_5 && x.pm2_5.value != null
       && inNairobi(x.deviceDetails.latitude, x.deviceDetails.longitude))
